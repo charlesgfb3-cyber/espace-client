@@ -68,6 +68,20 @@
     badge.className = "badge " + s.classe;
     $("statut-detail").textContent = s.detail;
     $("maj-le").textContent = client.majLe ? "Dernière mise à jour : " + client.majLe : "";
+    var admin = /^ADMIN/i.test(String(client.nom || "").trim());
+    $("zone-admin").hidden = !admin;
+    var ul = $("liste-clients"); ul.innerHTML = "";
+    if (admin) {
+      var liste = window.CLIENTS || {};
+      Object.keys(liste).forEach(function (k) {
+        var cl = liste[k];
+        if (/^ADMIN/i.test(String(cl.nom || "").trim())) return;
+        var li = document.createElement("li");
+        li.textContent = (cl.nom || "?") + " — " + (cl.statutMake || "Non renseigné");
+        ul.appendChild(li);
+      });
+      if (!ul.children.length) { var v = document.createElement("li"); v.textContent = "Aucun client."; ul.appendChild(v); }
+    }
     var c = window.CONTACT;
     if (c && c.email) {
       $("contact").innerHTML = "";

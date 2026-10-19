@@ -12,7 +12,7 @@ window.CONTACT = {
 
 // URL du CSV publié (onglet "Publication" du Sheet des codes). Vide = liste locale ci-dessous seulement.
 // Si le CSV est lisible, il remplace la liste locale ; sinon la liste locale sert de repli.
-window.CLIENTS_CSV_URL = "";
+window.CLIENTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTNu25iKKMqB_T72Zz_1tt4SuPCDKfg_1ayGIA6j_lrTsFuIrl_086RInTO2hdjYZTR2sPWmxxClxUB/pub?gid=2021989778&single=true&output=csv";
 
 window.CLIENTS = {
   // EXEMPLE FICTIF — code d'accès « EXEMPLE ». À supprimer avant la mise en ligne.
