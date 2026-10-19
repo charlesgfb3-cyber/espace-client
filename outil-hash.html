@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Outil d'empreinte</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section class="carte">
+      <h1>Outil d'empreinte</h1>
+      <p class="sous-titre">Saisissez un code d'accès pour obtenir son empreinte SHA-256, à coller dans clients.js. Le calcul se fait uniquement dans votre navigateur, rien n'est envoyé.</p>
+      <label for="code">Code d'accès</label>
+      <input id="code" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false">
+      <button id="calculer" type="button">Calculer l'empreinte</button>
+      <div class="bloc">
+        <p class="etiquette">Code normalisé (majuscules, sans espaces autour)</p>
+        <p id="normalise" class="petit">—</p>
+        <p class="etiquette">Empreinte SHA-256</p>
+        <input id="resultat" type="text" readonly>
+        <button id="copier" type="button" class="secondaire">Copier l'empreinte</button>
+        <p id="message" class="petit"></p>
+      </div>
+    </section>
+  </main>
+  <script src="sha256.js"></script>
+  <script>
+    document.getElementById("calculer").addEventListener("click", async function () {
+      var code = document.getElementById("code").value;
+      var n = normaliserCode(code);
+      if (!n) { document.getElementById("message").textContent = "Saisissez d'abord un code."; return; }
+      document.getElementById("normalise").textContent = n;
+      document.getElementById("resultat").value = await hacherCode(code);
+      document.getElementById("message").textContent = "";
+    });
+    document.getElementById("copier").addEventListener("click", async function () {
+      var r = document.getElementById("resultat");
+      if (!r.value) return;
+      try { await navigator.clipboard.writeText(r.value); }
+      catch (e) { r.select(); document.execCommand("copy"); }
+      document.getElementById("message").textContent = "Empreinte copiée.";
+    });
+  </script>
+</body>
+</html>

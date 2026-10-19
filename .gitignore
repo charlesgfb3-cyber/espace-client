@@ -1,0 +1,6 @@
+# Ne jamais publier les codes d'accès en clair
+codes-acces*
+*.csv
+*.xlsx
+*.xls
+.DS_Store

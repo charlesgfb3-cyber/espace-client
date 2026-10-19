@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f3f5f8">
+  <title>Espace client</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section id="vue-connexion" class="carte">
+      <h1>Espace client</h1>
+      <p class="sous-titre">Saisissez le code d'accès qui vous a été remis.</p>
+      <form id="form-connexion" autocomplete="off">
+        <label for="code">Code d'accès</label>
+        <input id="code" name="code" type="password" autocapitalize="characters" autocorrect="off" spellcheck="false" required>
+        <button type="submit">Accéder à mon espace</button>
+        <p id="erreur" class="erreur" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="vue-tableau" class="carte" hidden>
+      <p class="etiquette">Espace client</p>
+      <h2 id="nom-client"></h2>
+
+      <div class="bloc">
+        <p class="etiquette">Suivi de vos demandes</p>
+        <a id="lien-sheet" class="bouton" href="#" target="_blank" rel="noopener">Ouvrir mon tableau de suivi</a>
+      </div>
+
+      <div class="bloc">
+        <p class="etiquette">État de votre automatisation</p>
+        <span id="statut-make" class="badge"></span>
+        <p id="statut-detail" class="petit"></p>
+        <p id="maj-le" class="petit"></p>
+      </div>
+
+      <div class="bloc">
+        <p id="contact" class="petit"></p>
+        <button id="deconnexion" type="button" class="secondaire">Se déconnecter</button>
+      </div>
+    </section>
+    <p class="pied">Espace client</p>
+  </main>
+  <script src="sha256.js"></script>
+  <script src="clients.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
