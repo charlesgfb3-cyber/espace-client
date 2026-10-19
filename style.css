@@ -22,3 +22,27 @@ button:active,.bouton:active{opacity:.85}
 .petit{color:#5b6576;font-size:.9rem;margin:8px 0 0}
 .pied{text-align:center;color:#8a93a3;font-size:.8rem;margin-top:18px}
 [hidden]{display:none!important}
+
+main:has(#vue-admin:not([hidden])){max-width:1000px}
+.large{margin-top:16px}
+.entete-admin{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.entete-admin h2{margin:0}
+.mini{width:auto;margin:0;padding:8px 14px;font-size:14px}
+.onglets{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.onglets button{width:auto;margin:0;padding:8px 14px;font-size:14px;background:#e9edf3;color:#1d2533}
+.onglets button.actif{background:#2f6fed;color:#fff}
+.ligne-filtres{display:flex;gap:8px;flex-wrap:wrap}
+.ligne-filtres input{flex:2 1 200px}
+select,textarea{font-size:16px;padding:12px;border:1px solid #cdd3dd;border-radius:10px;background:#fafbfc;flex:1 1 140px;width:100%}
+textarea{font-family:ui-monospace,Menlo,monospace;font-size:13px}
+label{margin-top:12px}
+.table-wrap{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid #eef1f5;vertical-align:top}
+td .mini{display:inline-block;margin:2px}
+.code{display:block;word-break:break-all;background:#f3f5f8;padding:8px;border-radius:8px;font-size:12px}
+.journal{font-size:13px;padding-left:18px}
+.liens li{margin:6px 0}
+.apercu{border:1px dashed #cdd3dd;border-radius:12px;padding:14px}
+.force-faible{color:#c62828}.force-moyen{color:#9a6200}.force-fort{color:#1b7a3a}
+.suspendu{color:#c62828;font-weight:600}

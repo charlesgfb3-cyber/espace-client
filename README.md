@@ -58,3 +58,10 @@ Pour tester en local avant publication : ouvrez `index.html` dans le navigateur 
 Le Sheet « Codes d'accès clients » a un onglet **Publication** (formules : nom, empreinte SHA-256, lien, statut, date — jamais le code).
 Une fois cet onglet publié en CSV (Fichier > Partager > Publier sur le web > onglet Publication > CSV),
 collez l'URL dans `window.CLIENTS_CSV_URL` de `clients.js`. Le site lit alors le CSV ; en cas d'échec, il retombe sur la liste locale de `clients.js`.
+
+## Console admin
+Connexion avec un code dont la ligne a un nom commençant par « ADMIN », puis « Ouvrir la console admin » :
+clients (recherche, filtres, aperçu, statut, suspension, suppression), nouveau client (empreinte + ligne à coller),
+outils (force d'un code, empreinte, liens), export CSV sans codes, journal local.
+Mode connecté si l'API Apps Script (`window.ADMIN_API_URL`) est autorisée ; sinon mode copier-coller.
+Aucun secret dans ce dépôt : tout ce qui est ici est public.

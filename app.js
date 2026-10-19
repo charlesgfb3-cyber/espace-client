@@ -70,18 +70,7 @@
     $("maj-le").textContent = client.majLe ? "Dernière mise à jour : " + client.majLe : "";
     var admin = /^ADMIN/i.test(String(client.nom || "").trim());
     $("zone-admin").hidden = !admin;
-    var ul = $("liste-clients"); ul.innerHTML = "";
-    if (admin) {
-      var liste = window.CLIENTS || {};
-      Object.keys(liste).forEach(function (k) {
-        var cl = liste[k];
-        if (/^ADMIN/i.test(String(cl.nom || "").trim())) return;
-        var li = document.createElement("li");
-        li.textContent = (cl.nom || "?") + " — " + (cl.statutMake || "Non renseigné");
-        ul.appendChild(li);
-      });
-      if (!ul.children.length) { var v = document.createElement("li"); v.textContent = "Aucun client."; ul.appendChild(v); }
-    }
+    if (window.__admin) window.__admin.connecte(admin);
     var c = window.CONTACT;
     if (c && c.email) {
       $("contact").innerHTML = "";
@@ -108,12 +97,15 @@
     await listePrete;
     var client = trouverClient(hash);
     if (!client) { erreur.textContent = "Code d'accès incorrect."; return; }
+    window.__codeSaisi = code; // en mémoire seulement (pour l'API admin), jamais stocké
     try { sessionStorage.setItem(CLE_SESSION, hash); } catch (x) {}
     afficherTableau(client);
   }
 
   function deconnexion() {
     try { sessionStorage.removeItem(CLE_SESSION); } catch (x) {}
+    window.__codeSaisi = null;
+    if (window.__admin) window.__admin.fermer();
     afficherConnexion();
   }
 
@@ -129,5 +121,5 @@
     });
   });
 
-  window.__espaceClient = { trouverClient: trouverClient, parserCSV: parserCSV, clientsDepuisCSV: clientsDepuisCSV, listePrete: function () { return listePrete; }, STATUTS: STATUTS };
+  window.__espaceClient = { trouverClient: trouverClient, afficherTableau: afficherTableau, chargerListe: function () { listePrete = chargerListe(); return listePrete; }, parserCSV: parserCSV, clientsDepuisCSV: clientsDepuisCSV, listePrete: function () { return listePrete; }, STATUTS: STATUTS };
 })();

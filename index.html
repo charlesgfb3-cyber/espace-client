@@ -39,10 +39,7 @@
 
       <div id="zone-admin" class="bloc" hidden>
         <p class="etiquette">Zone réservée</p>
-        <p><a class="bouton" href="https://script.google.com/macros/s/AKfycbxJigmh3kIQiGlisEXCFlLXamZ0X8FbtdqAIs5FQvjZY8FP8zCQ8IaPI3GcaXmkz6Ca_w/exec" target="_blank" rel="noopener">Ouvrir le Cockpit</a></p>
-        <p><a class="bouton secondaire" href="https://docs.google.com/spreadsheets/d/1-CVVYP0Jh8sxCbd4LaOb20blB-GBbQ69rsNHBcrEUBs/edit" target="_blank" rel="noopener">Sheet des codes d'accès</a></p>
-        <p class="etiquette">Clients</p>
-        <ul id="liste-clients" class="petit"></ul>
+        <button id="ouvrir-admin" type="button">Ouvrir la console admin</button>
       </div>
 
       <div class="bloc">
@@ -50,10 +47,80 @@
         <button id="deconnexion" type="button" class="secondaire">Se déconnecter</button>
       </div>
     </section>
+    <section id="vue-admin" class="carte large" hidden>
+      <div class="entete-admin"><h2>Console admin</h2><button id="fermer-admin" type="button" class="secondaire mini">Retour</button></div>
+      <p id="mode-admin" class="petit"></p>
+
+      <nav class="onglets">
+        <button type="button" data-onglet="clients" class="actif">Clients</button>
+        <button type="button" data-onglet="nouveau">Nouveau client</button>
+        <button type="button" data-onglet="outils">Outils</button>
+        <button type="button" data-onglet="journal">Journal</button>
+      </nav>
+
+      <div data-panneau="clients">
+        <div class="ligne-filtres">
+          <input id="recherche" type="search" placeholder="Rechercher un client…">
+          <select id="filtre-statut"><option value="">Tous statuts Make</option><option>Actif</option><option>En pause</option><option>En préparation</option></select>
+          <select id="filtre-etat"><option value="">Actifs et suspendus</option><option>Actif</option><option>Suspendu</option></select>
+        </div>
+        <div class="table-wrap"><table id="table-clients"><thead><tr><th>Nom</th><th>Statut Make</th><th>Sheet</th><th>Accès</th><th>Mis à jour</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        <p id="compte-clients" class="petit"></p>
+        <button id="rafraichir" type="button" class="secondaire">Rafraîchir</button>
+        <button id="export-csv" type="button" class="secondaire">Exporter la liste (CSV, sans codes)</button>
+        <div id="apercu" class="bloc" hidden>
+          <p class="etiquette">Aperçu vue client</p>
+          <div id="apercu-contenu" class="apercu"></div>
+          <button id="fermer-apercu" type="button" class="secondaire">Fermer l'aperçu</button>
+        </div>
+      </div>
+
+      <div data-panneau="nouveau" hidden>
+        <p class="petit">Vous choisissez le code vous-même. Le site ne fait que calculer son empreinte.</p>
+        <label for="n-nom">Nom du client</label><input id="n-nom" autocomplete="off">
+        <label for="n-code">Code d'accès (choisi par vous)</label><input id="n-code" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <p id="n-force" class="petit"></p>
+        <label for="n-sheet">Lien du Sheet client</label><input id="n-sheet" type="url" placeholder="https://docs.google.com/spreadsheets/d/…">
+        <label for="n-statut">Statut Make</label><select id="n-statut"><option>En préparation</option><option>Actif</option><option>En pause</option></select>
+        <label for="n-notes">Notes (privées)</label><input id="n-notes" autocomplete="off">
+        <button id="n-preparer" type="button">Créer la session</button>
+        <p id="n-erreur" class="erreur"></p>
+        <div id="n-resultat" hidden>
+          <p class="etiquette">Empreinte SHA-256</p><code id="n-empreinte" class="code"></code>
+          <p class="etiquette">Ligne pour l'onglet privé « Codes d'accès » (séparateur tabulation)</p>
+          <textarea id="n-ligne" readonly rows="3"></textarea>
+          <button id="n-copier" type="button" class="secondaire">Copier la ligne</button>
+        </div>
+      </div>
+
+      <div data-panneau="outils" hidden>
+        <p class="etiquette">Contrôle de la force d'un code</p>
+        <input id="t-code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Tapez un code à tester (rien n'est envoyé)">
+        <p id="t-force" class="petit"></p>
+        <p class="etiquette" style="margin-top:20px">Calcul d'empreinte</p>
+        <code id="t-empreinte" class="code"></code>
+        <p class="etiquette" style="margin-top:20px">Liens utiles</p>
+        <ul class="liens">
+          <li><a href="https://script.google.com/macros/s/AKfycbxJigmh3kIQiGlisEXCFlLXamZ0X8FbtdqAIs5FQvjZY8FP8zCQ8IaPI3GcaXmkz6Ca_w/exec" target="_blank" rel="noopener">Cockpit</a></li>
+          <li><a href="https://docs.google.com/spreadsheets/d/1-CVVYP0Jh8sxCbd4LaOb20blB-GBbQ69rsNHBcrEUBs/edit" target="_blank" rel="noopener">Sheet des codes d'accès</a></li>
+          <li><a href="https://eu1.make.com/" target="_blank" rel="noopener">Make (scénarios)</a></li>
+          <li><a href="https://script.google.com/d/1yHEDuakXo2Yu9K-K1k-7n9IUpVFpqEzjI_JIZmADEKTmh_GNUe6yFNLI/edit" target="_blank" rel="noopener">Script du Sheet des codes</a></li>
+          <li><a href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener">Google Drive (guides, Checklist, Kit)</a></li>
+          <li><a href="https://github.com/charlesgfb3-cyber/espace-client" target="_blank" rel="noopener">Dépôt GitHub du site</a></li>
+        </ul>
+      </div>
+
+      <div data-panneau="journal" hidden>
+        <p class="petit">Journal conservé sur cet appareil uniquement (jamais de code en clair).</p>
+        <ul id="journal" class="journal"></ul>
+        <button id="vider-journal" type="button" class="secondaire">Vider le journal</button>
+      </div>
+    </section>
     <p class="pied">Espace client</p>
   </main>
   <script src="sha256.js"></script>
   <script src="clients.js"></script>
   <script src="app.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>
