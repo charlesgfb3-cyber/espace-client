@@ -10,6 +10,10 @@ window.CONTACT = {
   email: "charlesgfb3@gmail.com"
 };
 
+// URL du CSV publié (onglet "Publication" du Sheet des codes). Vide = liste locale ci-dessous seulement.
+// Si le CSV est lisible, il remplace la liste locale ; sinon la liste locale sert de repli.
+window.CLIENTS_CSV_URL = "";
+
 window.CLIENTS = {
   // EXEMPLE FICTIF — code d'accès « EXEMPLE ». À supprimer avant la mise en ligne.
   "3770be076b30e0deb2a7e3695f85683cafb9b5486236cc2b05698fae181c192b": {

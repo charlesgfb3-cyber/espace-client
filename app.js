@@ -7,6 +7,46 @@
     "en préparation": { libelle: "En préparation", classe: "prep", detail: "Votre automatisation est en cours d'installation." }
   };
 
+  // --- Chargement optionnel de la liste publiée (CSV de l'onglet "Publication") ---
+  function parserCSV(texte) {
+    var lignes = [], ligne = [], champ = "", q = false, i, ch;
+    for (i = 0; i < texte.length; i++) {
+      ch = texte[i];
+      if (q) {
+        if (ch === '"') { if (texte[i + 1] === '"') { champ += '"'; i++; } else q = false; }
+        else champ += ch;
+      } else if (ch === '"') q = true;
+      else if (ch === ",") { ligne.push(champ); champ = ""; }
+      else if (ch === "\n" || ch === "\r") {
+        if (ch === "\r" && texte[i + 1] === "\n") i++;
+        ligne.push(champ); champ = ""; lignes.push(ligne); ligne = [];
+      } else champ += ch;
+    }
+    if (champ !== "" || ligne.length) { ligne.push(champ); lignes.push(ligne); }
+    return lignes;
+  }
+
+  function clientsDepuisCSV(texte) {
+    var out = {}, n = 0, lignes = parserCSV(texte);
+    for (var i = 1; i < lignes.length; i++) {   // ligne 0 = en-têtes
+      var l = lignes[i], h = String(l[1] || "").trim().toLowerCase();
+      if (!/^[0-9a-f]{64}$/.test(h)) continue;
+      out[h] = { nom: l[0] || "", sheetUrl: l[2] || "", statutMake: l[3] || "", majLe: l[4] || "" };
+      n++;
+    }
+    return n ? out : null;
+  }
+
+  function chargerListe() {
+    var url = window.CLIENTS_CSV_URL;
+    if (!url || typeof fetch !== "function") return Promise.resolve();
+    return fetch(url, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
+      .then(function (t) { var c = clientsDepuisCSV(t); if (c) window.CLIENTS = c; })
+      .catch(function () { /* repli : liste locale clients.js */ });
+  }
+  var listePrete = chargerListe();
+
   function $(id) { return document.getElementById(id); }
 
   function trouverClient(hash) {
@@ -51,6 +91,7 @@
     var code = $("code").value;
     if (!window.normaliserCode(code)) { erreur.textContent = "Veuillez saisir votre code d'accès."; return; }
     var hash = await window.hacherCode(code);
+    await listePrete;
     var client = trouverClient(hash);
     if (!client) { erreur.textContent = "Code d'accès incorrect."; return; }
     try { sessionStorage.setItem(CLE_SESSION, hash); } catch (x) {}
@@ -67,9 +108,12 @@
     $("deconnexion").addEventListener("click", deconnexion);
     var h = null;
     try { h = sessionStorage.getItem(CLE_SESSION); } catch (x) {}
-    var client = h ? trouverClient(h) : null;
-    if (client) afficherTableau(client); else afficherConnexion();
+    afficherConnexion();
+    if (h) listePrete.then(function () {
+      var client = trouverClient(h);
+      if (client) afficherTableau(client);
+    });
   });
 
-  window.__espaceClient = { trouverClient: trouverClient, STATUTS: STATUTS };
+  window.__espaceClient = { trouverClient: trouverClient, parserCSV: parserCSV, clientsDepuisCSV: clientsDepuisCSV, listePrete: function () { return listePrete; }, STATUTS: STATUTS };
 })();

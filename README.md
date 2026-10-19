@@ -53,3 +53,8 @@ Pour tester en local avant publication : ouvrez `index.html` dans le navigateur 
 - Le **Google Sheet reste protégé par son propre partage Google** : partagez-le uniquement avec l'adresse e-mail du client (pas « Toute personne disposant du lien »). Même si le lien est vu par un tiers, il ne pourra pas l'ouvrir.
 - Le **fichier des codes d'accès ne doit jamais être publié** sur GitHub ni sur GitHub Pages. Gardez-le dans un dossier privé (ordinateur ou Drive privé).
 - La session se termine à la fermeture de l'onglet ou avec « Se déconnecter ».
+
+## Liste des clients depuis le Google Sheet (optionnel)
+Le Sheet « Codes d'accès clients » a un onglet **Publication** (formules : nom, empreinte SHA-256, lien, statut, date — jamais le code).
+Une fois cet onglet publié en CSV (Fichier > Partager > Publier sur le web > onglet Publication > CSV),
+collez l'URL dans `window.CLIENTS_CSV_URL` de `clients.js`. Le site lit alors le CSV ; en cas d'échec, il retombe sur la liste locale de `clients.js`.
